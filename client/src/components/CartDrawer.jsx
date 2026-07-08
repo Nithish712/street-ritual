@@ -52,7 +52,7 @@ export default function CartDrawer() {
             items.map(item => (
               <div key={item.cartKey} className="cart-item">
                 <img
-                  src={item.images?.[0] || 'https://placehold.co/80x100/111/d4af37?text=SR'}
+                  src={item.images?.[0] || 'https://placehold.co/80x100/0d0d0d/cc0000?text=SR'}
                   alt={item.name}
                   className="cart-item__img"
                 />

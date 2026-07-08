@@ -39,7 +39,7 @@ export default function OrderSuccess() {
           </p>
         )}
         {amount && (
-          <p style={{ textAlign: 'center', color: 'var(--gold)', fontSize: '1.3rem', fontWeight: '600', marginBottom: '32px' }}>
+          <p style={{ textAlign: 'center', color: 'var(--red)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '32px' }}>
             {amount} paid
           </p>
         )}

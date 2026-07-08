@@ -48,16 +48,16 @@ export default function ProductDetail() {
 
   const images = product.images?.length
     ? product.images
-    : [`https://placehold.co/600x800/111111/d4af37?text=${encodeURIComponent(product.name)}`];
+    : [`https://placehold.co/600x800/0d0d0d/cc0000?text=${encodeURIComponent(product.name)}`];
 
   return (
     <main className="product-detail">
       <div className="section">
         {/* Breadcrumb */}
         <nav style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '48px', fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gray-4)' }}>
-          <Link to="/" style={{ color: 'var(--gray-4)', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--gold)'} onMouseOut={e => e.target.style.color = 'var(--gray-4)'}>Home</Link>
+          <Link to="/" style={{ color: 'var(--gray-4)', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--red)'} onMouseOut={e => e.target.style.color = 'var(--gray-4)'}>Home</Link>
           <span>›</span>
-          <Link to="/shop" style={{ color: 'var(--gray-4)', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--gold)'} onMouseOut={e => e.target.style.color = 'var(--gray-4)'}>Shop</Link>
+          <Link to="/shop" style={{ color: 'var(--gray-4)', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--red)'} onMouseOut={e => e.target.style.color = 'var(--gray-4)'}>Shop</Link>
           <span>›</span>
           <span style={{ color: 'var(--off-white)' }}>{product.name}</span>
         </nav>
@@ -133,7 +133,7 @@ export default function ProductDetail() {
 
             {/* Stock warning */}
             {product.stock > 0 && product.stock < 10 && (
-              <p style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.8rem', color: 'var(--gold)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+              <p style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.8rem', color: 'var(--red)', letterSpacing: '2px', textTransform: 'uppercase' }}>
                 Only {product.stock} left
               </p>
             )}

@@ -20,7 +20,7 @@ export default function ProductCard({ product }) {
     <Link to={`/product/${product.id}`} className="product-card" id={`product-${product.id}`}>
       <div className="product-card__img-wrap">
         <img
-          src={product.images?.[0] || `https://placehold.co/600x800/111111/d4af37?text=${encodeURIComponent(product.name)}`}
+          src={product.images?.[0] || `https://placehold.co/600x800/0d0d0d/cc0000?text=${encodeURIComponent(product.name)}`}
           alt={product.name}
           className="product-card__img"
           loading="lazy"
