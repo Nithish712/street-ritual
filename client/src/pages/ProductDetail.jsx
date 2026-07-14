@@ -48,7 +48,7 @@ export default function ProductDetail() {
 
   const images = product.images?.length
     ? product.images
-    : [`https://placehold.co/600x800/0d0d0d/cc0000?text=${encodeURIComponent(product.name)}`];
+    : [`https://placehold.co/600x800/f2f2f2/1a1a1a?text=${encodeURIComponent(product.name)}`];
 
   return (
     <main className="product-detail">

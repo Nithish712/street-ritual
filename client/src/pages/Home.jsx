@@ -3,13 +3,23 @@ import { Link } from 'react-router-dom';
 import { getProducts } from '../api';
 import ProductCard from '../components/ProductCard';
 
-const MARQUEE_ITEMS = ['Street Ritual', 'New Drop', 'Raw Gear', 'Born Loud', 'Stay Raw', 'Limited Edition', 'India Made'];
+const MARQUEE_ITEMS = [
+  'Raw Streetwear', 'Unapologetic Swag', 'Heavyweight Quality', 'Limited Drops',
+  'No Restocks', 'Gang Mentality', 'Born Bold',
+];
 
 const CATEGORIES = [
-  { key: 'tshirts', label: 'T-Shirts', subtitle: 'Essential Cuts' },
-  { key: 'shirts', label: 'Shirts', subtitle: 'Woven Originals' },
-  { key: 'hoodies', label: 'Hoodies', subtitle: 'Heavyweight' },
+  { key: 'tshirts', label: 'T-Shirts', subtitle: 'Heavyweight Drops' },
+  { key: 'shirts', label: 'Shirts', subtitle: 'Street Essentials' },
+  { key: 'hoodies', label: 'Hoodies', subtitle: 'Oversized Fit' },
   { key: 'jeans', label: 'Jeans', subtitle: 'Raw Denim' },
+];
+
+const TRUST_ITEMS = [
+  { icon: '🔥', text: 'Premium Heavyweight Fabric' },
+  { icon: '🚫', text: 'Strictly No Restocks' },
+  { icon: '🛡️', text: '100% Authentic Quality' },
+  { icon: '⚡', text: 'Fast & Secure Shipping' },
 ];
 
 export default function Home() {
@@ -25,31 +35,46 @@ export default function Home() {
     <main>
       {/* Announcement Bar */}
       <div className="announce-bar">
-        🔥 Free Shipping on orders above ₹999 &nbsp;·&nbsp; New Drop is Live — Shop Now
+        Raw Streetwear. Built for the Gang. Limited Edition Drops.
       </div>
 
-      {/* Hero */}
+      {/* Hero — Full Screen */}
       <section className="hero" id="hero">
-        <div className="hero__bg-img" />
-        <div className="hero__slash" />
-        <div className="hero__slash-2" />
+        <div className="hero__bg" />
+        <div className="hero__texture" />
+        <img
+          src="https://placehold.co/1920x1080/111111/E27D60?text=STREET+GANG"
+          alt="Street Gang Style"
+          className="hero__img"
+        />
+        <div className="hero__overlay" />
+
+        <div className="hero__corner-tag">
+          <span>Edition</span>
+          <strong>001</strong>
+        </div>
 
         <div className="hero__content">
-          <span className="hero__tag">SS 2024 — New Collection</span>
+          <span className="hero__eyebrow">
+            New Drop
+          </span>
           <h1 className="hero__title">
             Street
-            <span className="hero__title-red">Ritual</span>
+            <em>Swag</em>
           </h1>
-          <p className="hero__subtitle">Not just clothes. A declaration.</p>
+          <p className="hero__sub">
+            Built for the underground. Worn by the bold. Discover our latest heavyweight collection featuring unapologetic style and raw street aesthetics.
+          </p>
           <div className="hero__cta">
             <Link to="/shop" className="btn btn-primary" id="hero-shop-btn">
-              Shop the Drop
+              Shop The Drop
             </Link>
             <Link to="/shop?category=hoodies" className="btn btn-outline" id="hero-hoodies-btn">
               View Hoodies
             </Link>
           </div>
         </div>
+
       </section>
 
       {/* Marquee */}
@@ -64,7 +89,15 @@ export default function Home() {
       </div>
 
       {/* Categories */}
-      <section id="categories" style={{ padding: '3px 0', background: 'var(--black)' }}>
+      <section className="section" id="categories">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '0 0 32px 0' }}>
+          <div>
+            <span className="section__label">Collections</span>
+            <h2 className="section__title">Shop by Category</h2>
+          </div>
+          <Link to="/shop" className="btn btn-ghost" id="view-all-categories-btn">View All →</Link>
+        </div>
+
         <div className="categories-grid">
           {CATEGORIES.map((cat) => (
             <Link
@@ -74,7 +107,7 @@ export default function Home() {
               id={`category-${cat.key}`}
             >
               <img
-                src={`https://placehold.co/600x800/0d0d0d/cc0000?text=${encodeURIComponent(cat.label)}`}
+                src={`https://placehold.co/600x800/2D4F1E/F5E6CC?text=${encodeURIComponent(cat.label)}`}
                 alt={cat.label}
                 className="category-card__img"
                 loading="lazy"
@@ -83,20 +116,32 @@ export default function Home() {
               <span className="category-card__top-tag">{cat.subtitle}</span>
               <div className="category-card__content">
                 <h2 className="category-card__name">{cat.label}</h2>
-                <span className="category-card__cta">Shop Now →</span>
+                <span className="category-card__cta">Cop Now →</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
+      {/* Trust Strip */}
+      <div className="trust-strip">
+        <div className="trust-strip__inner">
+          {TRUST_ITEMS.map(item => (
+            <div key={item.text} className="trust-item">
+              <span className="trust-item__icon">{item.icon}</span>
+              <span className="trust-item__text">{item.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Featured Products */}
       {featured.length > 0 && (
         <section className="section" id="featured-products">
-          <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '0 0 32px 0' }}>
             <div>
-              <span className="section__label">Latest Drop</span>
-              <h2 className="section__title">Featured Pieces</h2>
+              <span className="section__label">New Drops</span>
+              <h2 className="section__title">Street Essentials</h2>
             </div>
             <Link to="/shop" className="btn btn-ghost" id="view-all-btn">View All →</Link>
           </div>
@@ -109,22 +154,18 @@ export default function Home() {
       {/* About Strip */}
       <div className="about-strip" id="about">
         <div className="about-strip__inner">
-          <div className="about-strip__text">
+          <div>
             <h2 className="about-strip__quote">
-              Built for the<br />
-              <span>streets.</span><br />
-              Worn by the bold.
+              Born in the streets.<br />
+              Worn by the <span>gang.</span>
             </h2>
             <p className="about-strip__body">
-              Street Ritual was born from the underground — where craft meets culture and every piece carries weight.
-              We don't follow trends. We set rituals. Each drop is limited. Each piece is intentional.
-              Made in India. Worn everywhere.
+              Street Ritual is more than a brand, it's a movement. We bring you heavyweight quality, raw designs, and an unapologetic attitude. Every drop is limited edition, made for those who dictate the culture, not follow it.
             </p>
             <div className="about-strip__stats">
               {[
-                { num: '100%', label: 'Premium Fabric' },
-                { num: 'Limited', label: 'Each Drop' },
-                { num: 'India', label: 'Made Here' },
+                { num: 'Limited', label: 'Edition Drops' },
+                { num: 'Premium', label: 'Heavyweight Fits' },
               ].map(s => (
                 <div key={s.label}>
                   <div className="about-strip__stat-num">{s.num}</div>
@@ -135,8 +176,8 @@ export default function Home() {
           </div>
           <div className="about-strip__visual">
             <img
-              src="https://placehold.co/600x600/0d0d0d/cc0000?text=STREET+RITUAL"
-              alt="Street Ritual brand visual"
+              src="https://placehold.co/1080x1080/2D4F1E/F5E6CC?text=RAW+SWAG"
+              alt="Streetwear Style"
               className="about-strip__img"
             />
           </div>
