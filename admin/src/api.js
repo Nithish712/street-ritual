@@ -22,9 +22,14 @@ export const updateOrderStatus = (id, status) => api.patch(`/api/admin/orders/${
 export const adminLogin = (secret) => api.post('/api/admin/login', { secret });
 
 // Upload
-export const uploadImage = (formData) => api.post('/api/admin/upload', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' }
-});
+export const uploadImage = (formData) => {
+  return axios.post(`${API_URL}/api/admin/upload`, formData, {
+    headers: {
+      'x-admin-secret': ADMIN_SECRET
+      // Let axios auto-set Content-Type with proper multipart boundary
+    }
+  });
+};
 
 // Categories (Admin)
 export const createCategory = (data) => api.post('/api/admin/categories', data);

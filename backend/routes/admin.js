@@ -162,7 +162,7 @@ router.post('/settings', requireAdmin, async (req, res) => {
     
     const { error } = await supabase
       .from('store_settings')
-      .upsert(upserts);
+      .upsert(upserts, { onConflict: 'key' });
       
     if (error) throw error;
     res.json({ success: true });
