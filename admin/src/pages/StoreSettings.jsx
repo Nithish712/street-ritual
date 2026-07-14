@@ -38,6 +38,10 @@ export default function StoreSettings() {
 
   const handleFileUpload = async (e, field, loadingKey) => {
     const file = e.target.files[0];
+    
+    // Clear the input so the same file can be selected again if needed
+    e.target.value = '';
+    
     if (!file) return;
 
     setUploading(prev => ({ ...prev, [loadingKey]: true }));

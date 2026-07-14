@@ -30,7 +30,15 @@ export const uploadImage = async (formData) => {
       'x-admin-secret': ADMIN_SECRET
     }
   });
-  const data = await res.json();
+  
+  let data;
+  const text = await res.text();
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    throw new Error(`Server error (${res.status}): ${text.substring(0, 100)}`);
+  }
+  
   if (!res.ok) throw new Error(data.error || 'Upload failed');
   return { data }; // Keep { data: ... } structure for compatibility with axios response
 };
