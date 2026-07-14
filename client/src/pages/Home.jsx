@@ -116,7 +116,7 @@ export default function Home() {
               <span className="category-card__top-tag">{cat.subtitle}</span>
               <div className="category-card__content">
                 <h2 className="category-card__name">{cat.label}</h2>
-                <span className="category-card__cta">Cop Now →</span>
+                <span className="category-card__cta">Shop Now &rarr;</span>
               </div>
             </Link>
           ))}
