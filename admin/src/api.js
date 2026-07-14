@@ -22,13 +22,17 @@ export const updateOrderStatus = (id, status) => api.patch(`/api/admin/orders/${
 export const adminLogin = (secret) => api.post('/api/admin/login', { secret });
 
 // Upload
-export const uploadImage = (formData) => {
-  return axios.post(`${API_URL}/api/admin/upload`, formData, {
+export const uploadImage = async (formData) => {
+  const res = await fetch(`${API_URL}/api/admin/upload`, {
+    method: 'POST',
+    body: formData,
     headers: {
       'x-admin-secret': ADMIN_SECRET
-      // Let axios auto-set Content-Type with proper multipart boundary
     }
   });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Upload failed');
+  return { data }; // Keep { data: ... } structure for compatibility with axios response
 };
 
 // Categories (Admin)

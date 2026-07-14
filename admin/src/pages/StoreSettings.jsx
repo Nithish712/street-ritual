@@ -50,7 +50,7 @@ export default function StoreSettings() {
         setSettings(updatedSettings);
         // Auto-save to database so it reflects on user side immediately
         await updateStoreSettings(updatedSettings);
-        alert('Image uploaded & saved successfully!');
+        alert('Image uploaded & saved successfully! Please REFRESH your storefront to see the changes.');
       } else {
         alert('Upload returned no URL. Please try again.');
       }
