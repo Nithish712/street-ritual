@@ -46,10 +46,17 @@ export default function StoreSettings() {
       formData.append('image', file);
       const res = await uploadImage(formData);
       if (res.data && res.data.url) {
-        setSettings(prev => ({ ...prev, [field]: res.data.url }));
+        const updatedSettings = { ...settings, [field]: res.data.url };
+        setSettings(updatedSettings);
+        // Auto-save to database so it reflects on user side immediately
+        await updateStoreSettings(updatedSettings);
+        alert('Image uploaded & saved successfully!');
+      } else {
+        alert('Upload returned no URL. Please try again.');
       }
     } catch (err) {
-      alert('Failed to upload image');
+      console.error('Upload error:', err);
+      alert('Failed to upload image: ' + (err.response?.data?.error || err.message));
     } finally {
       setUploading(prev => ({ ...prev, [loadingKey]: false }));
     }

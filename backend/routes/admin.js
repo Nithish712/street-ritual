@@ -174,30 +174,51 @@ router.post('/settings', requireAdmin, async (req, res) => {
 // --- UPLOAD IMAGE ---
 router.post('/upload', requireAdmin, upload.single('image'), async (req, res) => {
   try {
-    if (!req.file) throw new Error('No image file provided');
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No image file provided' });
+    }
+
+    const bucketName = 'images';
+
+    // Check if bucket exists, create if not
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const bucketExists = buckets?.some(b => b.name === bucketName);
     
-    // Ensure 'images' bucket exists (fails silently if it already exists)
-    const { error: bucketError } = await supabase.storage.createBucket('images', { public: true });
-    // We ignore bucketError since it usually just means the bucket already exists.
-    
+    if (!bucketExists) {
+      const { error: createErr } = await supabase.storage.createBucket(bucketName, { 
+        public: true,
+        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+        fileSizeLimit: 10485760 // 10MB
+      });
+      if (createErr) {
+        console.error('Bucket creation error:', createErr);
+        throw new Error('Failed to create storage bucket: ' + createErr.message);
+      }
+    }
+
     const fileExt = req.file.originalname.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-    const { error } = await supabase.storage
-      .from('images')
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(bucketName)
       .upload(fileName, req.file.buffer, {
         contentType: req.file.mimetype,
         upsert: false
       });
 
-    if (error) throw error;
+    if (uploadError) {
+      console.error('Upload error:', uploadError);
+      throw new Error('Failed to upload file: ' + uploadError.message);
+    }
 
     const { data: publicUrlData } = supabase.storage
-      .from('images')
+      .from(bucketName)
       .getPublicUrl(fileName);
 
+    console.log('Image uploaded successfully:', publicUrlData.publicUrl);
     res.json({ success: true, url: publicUrlData.publicUrl });
   } catch (err) {
+    console.error('Upload endpoint error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
