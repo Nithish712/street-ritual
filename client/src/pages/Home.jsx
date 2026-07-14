@@ -172,7 +172,7 @@ export default function Home() {
           </div>
           <div className="about-strip__visual">
             <img
-              src="https://placehold.co/1080x1080/2D4F1E/F5E6CC?text=RAW+SWAG"
+              src={settings.about_img_url || "https://placehold.co/1080x1080/2D4F1E/F5E6CC?text=RAW+SWAG"}
               alt="Streetwear Style"
               className="about-strip__img"
             />

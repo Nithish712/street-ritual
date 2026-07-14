@@ -7,7 +7,8 @@ export default function StoreSettings() {
     hero_title_line_2: '',
     hero_subtitle: '',
     hero_bg_url: '',
-    marquee_text: ''
+    marquee_text: '',
+    about_img_url: ''
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -76,9 +77,13 @@ export default function StoreSettings() {
 
           <div style={{ borderTop: '1px solid var(--gray-2)', paddingTop: '24px' }}>
             <h3 style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)', marginBottom: '8px' }}>Images</h3>
-            <div className="form-group">
+            <div className="form-group" style={{ marginBottom: '12px' }}>
               <label className="form-label">Hero Background Image URL (Leave blank for dark gradient)</label>
               <input type="text" name="hero_bg_url" value={settings.hero_bg_url} onChange={handleChange} className="form-input" placeholder="https://images.unsplash.com/..." />
+            </div>
+            <div className="form-group">
+              <label className="form-label">About Section Image URL</label>
+              <input type="text" name="about_img_url" value={settings.about_img_url} onChange={handleChange} className="form-input" placeholder="https://images.unsplash.com/..." />
             </div>
           </div>
 
