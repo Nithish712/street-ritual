@@ -65,7 +65,7 @@ input,select,textarea{font-family:var(--font-sans)}
 
 /* ===== ANNOUNCE BAR ===== */
 .announce-bar{
-  background:var(--forest);
+  background: linear-gradient(90deg, var(--forest-dark) 0%, var(--forest) 50%, var(--forest-dark) 100%);
   color:var(--beige);
   text-align:center;
   padding:10px var(--sp-5);
@@ -322,7 +322,7 @@ input,select,textarea{font-family:var(--font-sans)}
 /* ===== MARQUEE ===== */
 .marquee{
   overflow:hidden;
-  background:var(--forest);
+  background: linear-gradient(90deg, var(--forest-dark) 0%, var(--forest) 50%, var(--forest-dark) 100%);
   padding:11px 0;
 }
 .marquee__track{
