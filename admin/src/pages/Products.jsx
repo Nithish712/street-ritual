@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAdminProducts, createProduct, updateProduct, deleteProduct } from '../api';
-
-const CATEGORIES = ['tshirts', 'shirts', 'hoodies', 'jeans'];
+import { getAdminProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../api';
 const SIZES_BY_CAT = {
   tshirts: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
   shirts: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -16,6 +14,7 @@ const EMPTY_FORM = {
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -23,12 +22,21 @@ export default function Products() {
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  const load = () => {
+  const load = async () => {
     setLoading(true);
-    getAdminProducts()
-      .then(res => setProducts(res.data.data || []))
-      .catch(() => setProducts([]))
-      .finally(() => setLoading(false));
+    try {
+      const [prodRes, catRes] = await Promise.all([
+        getAdminProducts(),
+        getCategories()
+      ]);
+      setProducts(prodRes.data.data || []);
+      setCategories(catRes.data.data || []);
+    } catch (err) {
+      console.error(err);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { load(); }, []);
@@ -183,7 +191,7 @@ export default function Products() {
                   <div className="form-group">
                     <label className="form-label">Category *</label>
                     <select className="form-input" value={form.category} onChange={e => setForm(f => ({...f, category: e.target.value, sizes: []}))} id="product-category-select">
-                      {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                      {categories.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}
                     </select>
                   </div>
                   <div className="form-group">

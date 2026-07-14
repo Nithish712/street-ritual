@@ -3,16 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import { getProducts } from '../api';
 import ProductCard from '../components/ProductCard';
 
-const FILTERS = [
-  { key: 'all', label: 'All' },
-  { key: 'tshirts', label: 'T-Shirts' },
-  { key: 'shirts', label: 'Shirts' },
-  { key: 'hoodies', label: 'Hoodies' },
-  { key: 'jeans', label: 'Jeans' },
-];
+import { useStore } from '../context/StoreContext';
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { categories } = useStore();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -62,15 +57,23 @@ export default function Shop() {
 
       <div className="section">
         <div className="shop-filters" role="group" aria-label="Product categories">
-          {FILTERS.map(f => (
+          <button
+            className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
+            onClick={() => handleFilter('all')}
+            id="filter-all"
+            aria-pressed={activeCategory === 'all'}
+          >
+            All
+          </button>
+          {categories.map(c => (
             <button
-              key={f.key}
-              className={`filter-btn ${activeCategory === f.key ? 'active' : ''}`}
-              onClick={() => handleFilter(f.key)}
-              id={`filter-${f.key}`}
-              aria-pressed={activeCategory === f.key}
+              key={c.slug}
+              className={`filter-btn ${activeCategory === c.slug ? 'active' : ''}`}
+              onClick={() => handleFilter(c.slug)}
+              id={`filter-${c.slug}`}
+              aria-pressed={activeCategory === c.slug}
             >
-              {f.label}
+              {c.name}
             </button>
           ))}
         </div>

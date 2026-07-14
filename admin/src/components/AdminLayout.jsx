@@ -4,7 +4,9 @@ import { useAuth } from '../context/AuthContext';
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊' },
   { to: '/products', label: 'Products', icon: '👕' },
+  { to: '/categories', label: 'Categories', icon: '📁' },
   { to: '/orders', label: 'Orders', icon: '📦' },
+  { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 export default function AdminLayout({ children, title }) {

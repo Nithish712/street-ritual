@@ -115,4 +115,63 @@ router.patch('/orders/:id/status', requireAdmin, async (req, res) => {
   }
 });
 
+// --- CATEGORY CRUD ---
+
+// CREATE category
+router.post('/categories', requireAdmin, async (req, res) => {
+  try {
+    const { name, slug } = req.body;
+    const { data, error } = await supabase
+      .from('categories')
+      .insert({ name, slug })
+      .select()
+      .single();
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE category
+router.delete('/categories/:id', requireAdmin, async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from('categories')
+      .delete()
+      .eq('id', req.params.id);
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- STORE SETTINGS ---
+
+// UPDATE settings (accepts an object of key: value pairs)
+router.post('/settings', requireAdmin, async (req, res) => {
+  try {
+    const settings = req.body; // e.g. { hero_bg_url: 'http...', marquee_text: '...' }
+    
+    // Prepare upsert array
+    const updates = Object.keys(settings).map(key => ({
+      key,
+      value: settings[key],
+      updated_at: new Date().toISOString()
+    }));
+
+    if (updates.length > 0) {
+      const { error } = await supabase
+        .from('store_settings')
+        .upsert(updates);
+      if (error) throw error;
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;

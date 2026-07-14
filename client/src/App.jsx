@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
+import { StoreProvider } from './context/StoreContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -13,14 +14,16 @@ export default function App() {
     <BrowserRouter>
       <CartProvider>
         <ToastProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-          </Routes>
-          <Footer />
+          <StoreProvider>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+            </Routes>
+            <Footer />
+          </StoreProvider>
         </ToastProvider>
       </CartProvider>
     </BrowserRouter>

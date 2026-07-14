@@ -21,4 +21,15 @@ export const updateOrderStatus = (id, status) => api.patch(`/api/admin/orders/${
 // Auth
 export const adminLogin = (secret) => api.post('/api/admin/login', { secret });
 
+// Categories (Admin)
+export const createCategory = (data) => api.post('/api/admin/categories', data);
+export const deleteCategory = (id) => api.delete(`/api/admin/categories/${id}`);
+
+// Store Settings (Admin)
+export const updateStoreSettings = (data) => api.post('/api/admin/settings', data);
+
+// Public APIs (accessed by client, but we can define here to use in admin too)
+export const getCategories = () => axios.get(`${API_URL}/api/store/categories`);
+export const getStoreSettings = () => axios.get(`${API_URL}/api/store/settings`);
+
 export default api;

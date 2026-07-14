@@ -12,4 +12,7 @@ export const getProduct = (id) => api.get(`/api/products/${id}`);
 export const createCheckoutSession = (data) => api.post('/api/orders/checkout', data);
 export const getSession = (sessionId) => api.get(`/api/orders/session/${sessionId}`);
 
+export const getCategories = () => api.get('/api/store/categories');
+export const getStoreSettings = () => api.get('/api/store/settings');
+
 export default api;

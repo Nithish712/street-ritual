@@ -8,12 +8,7 @@ const MARQUEE_ITEMS = [
   'No Restocks', 'Gang Mentality', 'Born Bold',
 ];
 
-const CATEGORIES = [
-  { key: 'tshirts', label: 'T-Shirts', subtitle: 'Heavyweight Drops' },
-  { key: 'shirts', label: 'Shirts', subtitle: 'Street Essentials' },
-  { key: 'hoodies', label: 'Hoodies', subtitle: 'Oversized Fit' },
-  { key: 'jeans', label: 'Jeans', subtitle: 'Raw Denim' },
-];
+import { useStore } from '../context/StoreContext';
 
 const TRUST_ITEMS = [
   { icon: '🔥', text: 'Premium Heavyweight Fabric' },
@@ -24,6 +19,7 @@ const TRUST_ITEMS = [
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
+  const { settings, categories, loading } = useStore();
 
   useEffect(() => {
     getProducts()
@@ -43,7 +39,7 @@ export default function Home() {
         <div className="hero__bg" />
         <div className="hero__texture" />
         <img
-          src="https://placehold.co/1920x1080/111111/E27D60?text=STREET+GANG"
+          src={settings.hero_bg_url || "https://placehold.co/1920x1080/111111/E27D60?text=STREET+GANG"}
           alt="Street Gang Style"
           className="hero__img"
         />
@@ -59,11 +55,11 @@ export default function Home() {
             New Drop
           </span>
           <h1 className="hero__title">
-            Street
-            <em>Swag</em>
+            {settings.hero_title_line_1 || 'Street'}
+            <em>{settings.hero_title_line_2 || 'Swag'}</em>
           </h1>
           <p className="hero__sub">
-            Built for the underground. Worn by the bold. Discover our latest heavyweight collection featuring unapologetic style and raw street aesthetics.
+            {settings.hero_subtitle || 'Built for the underground. Worn by the bold. Discover our latest heavyweight collection featuring unapologetic style and raw street aesthetics.'}
           </p>
           <div className="hero__cta">
             <Link to="/shop" className="btn btn-primary" id="hero-shop-btn">
@@ -80,7 +76,7 @@ export default function Home() {
       {/* Marquee */}
       <div className="marquee" aria-hidden="true">
         <div className="marquee__track">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+          {Array(4).fill(settings.marquee_text || 'Raw Streetwear | Unapologetic Swag | Heavyweight').map((item, i) => (
             <span key={i} className="marquee__item">
               {item} <span className="marquee__sep">✦</span>
             </span>
@@ -99,23 +95,23 @@ export default function Home() {
         </div>
 
         <div className="categories-grid">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <Link
-              key={cat.key}
-              to={`/shop?category=${cat.key}`}
+              key={cat.slug}
+              to={`/shop?category=${cat.slug}`}
               className="category-card"
-              id={`category-${cat.key}`}
+              id={`category-${cat.slug}`}
             >
               <img
-                src={`https://placehold.co/600x800/2D4F1E/F5E6CC?text=${encodeURIComponent(cat.label)}`}
-                alt={cat.label}
+                src={`https://placehold.co/600x800/2D4F1E/F5E6CC?text=${encodeURIComponent(cat.name)}`}
+                alt={cat.name}
                 className="category-card__img"
                 loading="lazy"
               />
               <div className="category-card__overlay" />
-              <span className="category-card__top-tag">{cat.subtitle}</span>
+              <span className="category-card__top-tag">Shop Now</span>
               <div className="category-card__content">
-                <h2 className="category-card__name">{cat.label}</h2>
+                <h2 className="category-card__name">{cat.name}</h2>
                 <span className="category-card__cta">Shop Now &rarr;</span>
               </div>
             </Link>

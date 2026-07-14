@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useStore } from '../context/StoreContext';
 import CartDrawer from './CartDrawer';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { count, isOpen, setIsOpen } = useCart();
+  const { categories } = useStore();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -24,8 +26,9 @@ export default function Navbar() {
         <ul className="navbar__links">
           <li><NavLink to="/" end>Home</NavLink></li>
           <li><NavLink to="/shop">Shop</NavLink></li>
-          <li><NavLink to="/shop?category=hoodies">Hoodies</NavLink></li>
-          <li><NavLink to="/shop?category=tshirts">Tees</NavLink></li>
+          {categories.slice(0, 4).map(cat => (
+            <li key={cat.slug}><NavLink to={`/shop?category=${cat.slug}`}>{cat.name}</NavLink></li>
+          ))}
         </ul>
 
         <div className="navbar__right">
@@ -59,10 +62,9 @@ export default function Navbar() {
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
         <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop All</Link>
-        <Link to="/shop?category=tshirts" onClick={() => setMenuOpen(false)}>T-Shirts</Link>
-        <Link to="/shop?category=shirts" onClick={() => setMenuOpen(false)}>Shirts</Link>
-        <Link to="/shop?category=hoodies" onClick={() => setMenuOpen(false)}>Hoodies</Link>
-        <Link to="/shop?category=jeans" onClick={() => setMenuOpen(false)}>Jeans</Link>
+        {categories.map(cat => (
+          <Link key={cat.slug} to={`/shop?category=${cat.slug}`} onClick={() => setMenuOpen(false)}>{cat.name}</Link>
+        ))}
       </div>
 
       <CartDrawer />
