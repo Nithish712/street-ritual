@@ -83,6 +83,10 @@ export default function Products() {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
+    
+    // Clear the input so the same file can be selected again if needed
+    e.target.value = '';
+    
     if (!file) return;
 
     setUploadingImage(true);
@@ -96,9 +100,11 @@ export default function Products() {
           current.push(res.data.url);
           return { ...f, images: current.join(', ') };
         });
+        showAlert('Image uploaded successfully', 'success');
       }
     } catch (err) {
-      showAlert('Failed to upload image', 'error');
+      console.error('Upload error:', err);
+      showAlert('Failed to upload image: ' + (err.response?.data?.error || err.message), 'error');
     } finally {
       setUploadingImage(false);
     }
