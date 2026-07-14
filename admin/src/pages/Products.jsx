@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAdminProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../api';
+import { getAdminProducts, createProduct, updateProduct, deleteProduct, getCategories, uploadImage } from '../api';
 const SIZES_BY_CAT = {
   tshirts: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
   shirts: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -21,6 +21,7 @@ export default function Products() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -73,11 +74,34 @@ export default function Products() {
     }
   };
 
-  const toggleSize = (size) => {
+  const toggleSize = (s) => {
     setForm(f => ({
       ...f,
-      sizes: f.sizes.includes(size) ? f.sizes.filter(s => s !== size) : [...f.sizes, size],
+      sizes: f.sizes.includes(s) ? f.sizes.filter(x => x !== s) : [...f.sizes, s]
     }));
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await uploadImage(formData);
+      if (res.data && res.data.url) {
+        setForm(f => {
+          const current = f.images ? f.images.split(',').map(s => s.trim()).filter(Boolean) : [];
+          current.push(res.data.url);
+          return { ...f, images: current.join(', ') };
+        });
+      }
+    } catch (err) {
+      showAlert('Failed to upload image', 'error');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -233,8 +257,14 @@ export default function Products() {
                     </div>
                   </div>
                   <div className="form-group full">
-                    <label className="form-label">Image URLs (comma-separated)</label>
-                    <input className="form-input" value={form.images} onChange={e => setForm(f => ({...f, images: e.target.value}))} placeholder="https://... , https://..." id="product-images-input" />
+                    <label className="form-label">Images (Comma-separated URLs or Upload)</label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input className="form-input" style={{ flex: 1 }} value={form.images} onChange={e => setForm(f => ({...f, images: e.target.value}))} placeholder="https://... , https://..." id="product-images-input" />
+                      <label className="btn btn-outline" style={{ cursor: 'pointer' }}>
+                        {uploadingImage ? 'Uploading...' : 'Upload File'}
+                        <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleFileUpload} />
+                      </label>
+                    </div>
                   </div>
                   <div className="form-group full">
                     <label className="form-label">Description</label>

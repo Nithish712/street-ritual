@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getStoreSettings, updateStoreSettings } from '../api';
+import { getStoreSettings, updateStoreSettings, uploadImage } from '../api';
 
 export default function StoreSettings() {
   const [settings, setSettings] = useState({
@@ -12,6 +12,7 @@ export default function StoreSettings() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState({ hero: false, about: false });
 
   useEffect(() => {
     fetchSettings();
@@ -33,6 +34,25 @@ export default function StoreSettings() {
 
   const handleChange = (e) => {
     setSettings(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFileUpload = async (e, field, loadingKey) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(prev => ({ ...prev, [loadingKey]: true }));
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await uploadImage(formData);
+      if (res.data && res.data.url) {
+        setSettings(prev => ({ ...prev, [field]: res.data.url }));
+      }
+    } catch (err) {
+      alert('Failed to upload image');
+    } finally {
+      setUploading(prev => ({ ...prev, [loadingKey]: false }));
+    }
   };
 
   const handleSave = async (e) => {
@@ -78,12 +98,24 @@ export default function StoreSettings() {
           <div style={{ borderTop: '1px solid var(--gray-2)', paddingTop: '24px' }}>
             <h3 style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)', marginBottom: '8px' }}>Images</h3>
             <div className="form-group" style={{ marginBottom: '12px' }}>
-              <label className="form-label">Hero Background Image URL (Leave blank for dark gradient)</label>
-              <input type="text" name="hero_bg_url" value={settings.hero_bg_url} onChange={handleChange} className="form-input" placeholder="https://images.unsplash.com/..." />
+              <label className="form-label">Hero Background Image</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input type="text" name="hero_bg_url" value={settings.hero_bg_url} onChange={handleChange} className="form-input" style={{ flex: 1 }} placeholder="Image URL..." />
+                <label className="btn btn-outline" style={{ cursor: 'pointer' }}>
+                  {uploading.hero ? 'Uploading...' : 'Upload File'}
+                  <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => handleFileUpload(e, 'hero_bg_url', 'hero')} />
+                </label>
+              </div>
             </div>
             <div className="form-group">
-              <label className="form-label">About Section Image URL</label>
-              <input type="text" name="about_img_url" value={settings.about_img_url} onChange={handleChange} className="form-input" placeholder="https://images.unsplash.com/..." />
+              <label className="form-label">About Section Image</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input type="text" name="about_img_url" value={settings.about_img_url} onChange={handleChange} className="form-input" style={{ flex: 1 }} placeholder="Image URL..." />
+                <label className="btn btn-outline" style={{ cursor: 'pointer' }}>
+                  {uploading.about ? 'Uploading...' : 'Upload File'}
+                  <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => handleFileUpload(e, 'about_img_url', 'about')} />
+                </label>
+              </div>
             </div>
           </div>
 

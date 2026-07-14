@@ -1,5 +1,8 @@
 import express from 'express';
+import multer from 'multer';
 import supabase from '../supabaseClient.js';
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
@@ -149,26 +152,51 @@ router.delete('/categories/:id', requireAdmin, async (req, res) => {
 
 // --- STORE SETTINGS ---
 
-// UPDATE settings (accepts an object of key: value pairs)
+// --- SETTINGS CRUD ---
 router.post('/settings', requireAdmin, async (req, res) => {
   try {
-    const settings = req.body; // e.g. { hero_bg_url: 'http...', marquee_text: '...' }
-    
-    // Prepare upsert array
-    const updates = Object.keys(settings).map(key => ({
-      key,
-      value: settings[key],
-      updated_at: new Date().toISOString()
+    const settings = req.body;
+    const upserts = Object.keys(settings).map(key => ({
+      key, value: settings[key]
     }));
-
-    if (updates.length > 0) {
-      const { error } = await supabase
-        .from('store_settings')
-        .upsert(updates);
-      if (error) throw error;
-    }
-
+    
+    const { error } = await supabase
+      .from('store_settings')
+      .upsert(upserts);
+      
+    if (error) throw error;
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- UPLOAD IMAGE ---
+router.post('/upload', requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) throw new Error('No image file provided');
+    
+    // Ensure 'images' bucket exists (fails silently if it already exists)
+    const { error: bucketError } = await supabase.storage.createBucket('images', { public: true });
+    // We ignore bucketError since it usually just means the bucket already exists.
+    
+    const fileExt = req.file.originalname.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+    const { error } = await supabase.storage
+      .from('images')
+      .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+        upsert: false
+      });
+
+    if (error) throw error;
+
+    const { data: publicUrlData } = supabase.storage
+      .from('images')
+      .getPublicUrl(fileName);
+
+    res.json({ success: true, url: publicUrlData.publicUrl });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

@@ -21,6 +21,11 @@ export const updateOrderStatus = (id, status) => api.patch(`/api/admin/orders/${
 // Auth
 export const adminLogin = (secret) => api.post('/api/admin/login', { secret });
 
+// Upload
+export const uploadImage = (formData) => api.post('/api/admin/upload', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+
 // Categories (Admin)
 export const createCategory = (data) => api.post('/api/admin/categories', data);
 export const deleteCategory = (id) => api.delete(`/api/admin/categories/${id}`);
