@@ -36,13 +36,15 @@ export default function Home() {
 
       {/* Hero — Full Screen */}
       <section className="hero" id="hero">
-        <div className="hero__bg" />
+        <div className={`hero__bg ${settings.hero_bg_url ? 'hero__bg--black' : 'hero__bg--green'}`} />
         <div className="hero__texture" />
-        <img
-          src={settings.hero_bg_url || "https://placehold.co/1920x1080/111111/E27D60?text=STREET+GANG"}
-          alt="Street Gang Style"
-          className="hero__img"
-        />
+        {settings.hero_bg_url && (
+          <img
+            src={settings.hero_bg_url}
+            alt="Street Gang Style"
+            className="hero__img"
+          />
+        )}
         <div className="hero__overlay" />
 
         <div className="hero__corner-tag">
