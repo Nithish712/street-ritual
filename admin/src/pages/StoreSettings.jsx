@@ -20,8 +20,8 @@ export default function StoreSettings() {
   const fetchSettings = async () => {
     try {
       const { data } = await getStoreSettings();
-      if (data.data && data.data.data) {
-        setSettings((prev) => ({ ...prev, ...data.data.data }));
+      if (data.data) {
+        setSettings((prev) => ({ ...prev, ...data.data }));
       }
     } catch (err) {
       console.error(err);

@@ -10,9 +10,7 @@ export default function Categories() {
   const fetchCategories = async () => {
     try {
       const { data } = await getCategories();
-      if (data.data) {
-        setCategories(data.data.data || []);
-      }
+      setCategories(data.data || []);
     } catch (err) {
       console.error(err);
       alert('Error fetching categories');
