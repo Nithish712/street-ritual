@@ -100,11 +100,11 @@ export default function Products() {
           current.push(res.data.url);
           return { ...f, images: current.join(', ') };
         });
-        showAlert('Image uploaded successfully', 'success');
+        alert('Image uploaded successfully! The URL has been added to the form. Remember to click "Create Product" or "Update Product" at the bottom to save!');
       }
     } catch (err) {
       console.error('Upload error:', err);
-      showAlert('Failed to upload image: ' + (err.response?.data?.error || err.message), 'error');
+      alert('Failed to upload image: ' + (err.response?.data?.error || err.message));
     } finally {
       setUploadingImage(false);
     }
