@@ -3,7 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productRoutes from './routes/products.js';
 import orderRoutes from './routes/orders.js';
-import stripeRoutes from './routes/stripe.js';
 import adminRoutes from './routes/admin.js';
 
 dotenv.config();
@@ -11,8 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Stripe webhook needs raw body BEFORE json middleware
-app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
+// (Stripe webhook removed)
 
 // CORS
 const allowedOrigins = [
@@ -37,7 +35,6 @@ app.use(express.json());
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/stripe', stripeRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Health check
