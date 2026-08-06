@@ -503,7 +503,7 @@ input,select,textarea{font-family:var(--font-sans)}
 
 .products-grid{
   display:grid;
-  grid-template-columns:repeat(4, 1fr);
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
   gap:var(--sp-5);
 }
 
@@ -967,7 +967,6 @@ input,select,textarea{font-family:var(--font-sans)}
   .navbar__links{display:none}
   .navbar__hamburger{display:flex}
   .categories-grid{grid-template-columns:repeat(2,1fr)}
-  .products-grid{grid-template-columns:repeat(3,1fr); gap:var(--sp-4)}
   .footer__grid{grid-template-columns:1fr 1fr}
   .about-strip__inner{grid-template-columns:1fr}
   .about-strip__visual{display:none}
