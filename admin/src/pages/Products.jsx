@@ -263,26 +263,14 @@ export default function Products() {
                     </div>
                   </div>
                   <div className="form-group full">
-                    <label className="form-label" style={{ color: 'var(--gold)' }}>
-                      Images (Upload your image here ↓)
-                    </label>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      <input className="form-input" style={{ flex: 1, border: '1px solid var(--gold)' }} value={form.images} onChange={e => setForm(f => ({...f, images: e.target.value}))} placeholder="Image URL will appear here after upload..." id="product-images-input" />
-                      
-                      <div style={{ position: 'relative' }}>
-                        {/* Bouncing visual pointer */}
-                        <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', color: 'var(--gold)', fontWeight: 'bold', animation: 'bounce 1s infinite' }}>
-                          ↓ CLICK THIS
-                        </div>
-                        <label className="btn btn-outline" style={{ cursor: 'pointer', border: '2px solid var(--gold)', background: 'rgba(212, 175, 55, 0.1)' }}>
-                          {uploadingImage ? 'Uploading...' : 'Upload File'}
-                          <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleFileUpload} />
-                        </label>
-                      </div>
+                    <label className="form-label">Images (Comma-separated URLs or Upload)</label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input className="form-input" style={{ flex: 1 }} value={form.images} onChange={e => setForm(f => ({...f, images: e.target.value}))} placeholder="https://... , https://..." id="product-images-input" />
+                      <label className="btn btn-outline" style={{ cursor: 'pointer' }}>
+                        {uploadingImage ? 'Uploading...' : 'Upload File'}
+                        <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleFileUpload} />
+                      </label>
                     </div>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--gray-3)', marginTop: '8px' }}>
-                      Step 1: Click 'Upload File'. Step 2: Wait for success popup. Step 3: Click 'Create/Update Product' below.
-                    </p>
                   </div>
                   <div className="form-group full">
                     <label className="form-label">Description</label>
@@ -290,17 +278,11 @@ export default function Products() {
                   </div>
                 </div>
               </div>
-              <div className="modal-footer" style={{ borderTop: '2px dashed var(--gold)' }}>
+              <div className="modal-footer">
                 <button type="button" className="btn btn-outline" onClick={() => setModalOpen(false)}>Cancel</button>
-                <div style={{ position: 'relative' }}>
-                  {/* Bouncing visual pointer for save button */}
-                  <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', color: 'var(--gold)', fontWeight: 'bold', animation: 'bounce 1s infinite', whiteSpace: 'nowrap' }}>
-                    ↓ THEN CLICK THIS TO SAVE
-                  </div>
-                  <button type="submit" id="save-product-btn" className="btn btn-primary" disabled={saving} style={{ border: '2px solid var(--gold)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
-                    {saving ? 'Saving...' : editing ? 'Update Product' : 'Create Product'}
-                  </button>
-                </div>
+                <button type="submit" id="save-product-btn" className="btn btn-primary" disabled={saving}>
+                  {saving ? 'Saving...' : editing ? 'Update Product' : 'Create Product'}
+                </button>
               </div>
             </form>
           </div>
