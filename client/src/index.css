@@ -122,6 +122,11 @@ input,select,textarea{font-family:var(--font-sans)}
   display:flex; align-items:center; justify-content:center;
 }
 
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -10px); }
+}
+
 .navbar__hamburger{
   display:none; flex-direction:column; gap:5px;
   background:none; border:none; cursor:pointer; padding:4px;
